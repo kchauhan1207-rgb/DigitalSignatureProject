@@ -37,6 +37,8 @@ namespace DigitalSignatureProject
 
             lblMessage.Text = "File uploaded successfully!";
             lblMessage.ForeColor = System.Drawing.Color.Green;
+            Session["PDFPath"] = filePath;
+            Response.Redirect("SignDocument.aspx");
 
             ScriptManager.RegisterStartupScript(this, this.GetType(), "hideSpinner", "document.getElementById('loadingSpinner').style.display='none';", true);
 
