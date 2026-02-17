@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 using System.Web.UI;
@@ -11,32 +11,32 @@ namespace DigitalSignatureProject
         {
             if (!IsPostBack)
             {
-                var selected = Session["SelectedPages"] as int[];
-                var pdfPathObj = Session["PDFPath"];
+                int[] selected = Session["SelectedPages"] as int[];
+                string pdfPath = Session["PDFPath"] as string;
 
                 if (selected == null || selected.Length == 0)
                 {
-                    litMessage.Text = "<div style='color:darkred'>No pages selected. Go back and select pages to sign.</div>";
+                    litMessage.Text =
+                        "<div style='color:darkred'>No pages selected. Go back and select pages to sign.</div>";
                     return;
                 }
 
-                if (pdfPathObj == null)
+                if (string.IsNullOrEmpty(pdfPath))
                 {
-                    litMessage.Text = "<div style='color:darkred'>Uploaded PDF not found in session.</div>";
+                    litMessage.Text =
+                        "<div style='color:darkred'>Uploaded PDF not found in session.</div>";
                     return;
                 }
 
-                string physicalPath = pdfPathObj.ToString();
-                string fileName = Path.GetFileName(physicalPath);
+                string fileName = Path.GetFileName(pdfPath);
                 string virtualPath = ResolveUrl("~/Uploads/" + fileName);
 
-                var sb = new StringBuilder();
+                StringBuilder sb = new StringBuilder();
 
-                foreach (var p in selected)
+                foreach (int p in selected)
                 {
                     sb.AppendFormat(
-                        "<a href=\"#\" onclick=\"document.getElementById('{0}').src='{1}#page={2}'; return false;\">Open page {2}</a>&nbsp;&nbsp;",
-                        pdfFrame.ClientID,
+                        "<a href=\"{0}#page={1}\" target=\"pdfFrame\">Open page {1}</a>&nbsp;&nbsp;",
                         virtualPath,
                         p
                     );
