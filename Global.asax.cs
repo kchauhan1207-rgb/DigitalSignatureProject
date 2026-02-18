@@ -9,7 +9,7 @@ using System.Web.SessionState;
 
 namespace DigitalSignatureProject
 {
-    public class Global : HttpApplication
+    public class Global : System.Web.HttpApplication
     {
         void Application_Start(object sender, EventArgs e)
         {

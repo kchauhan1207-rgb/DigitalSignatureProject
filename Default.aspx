@@ -16,6 +16,7 @@
     </div>
 
     <!-- Upload Button -->
+    <a href="About.aspx">About.aspx</a>
    <asp:Button ID="btnUpload" runat="server" Text="Upload PDF" CssClass="btn btn-primary w-100"
     OnClientClick="document.getElementById('loadingSpinner').style.display='block';" 
     OnClick="btnUpload_Click" />
@@ -31,7 +32,7 @@
 
     <!-- PDF Preview -->
     <div class="mt-3">
-        <iframe id="pdfPreview" runat="server" width="100%" height="500px" style="border:1px solid #ccc; border-radius:8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-top:20px;"></iframe>
+        <iframe id="pdfPreview" runat="server" width="100" height="500" style="border:1px solid #ccc; border-radius:8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-top:20px;"></iframe>
     </div>
 </div>
 
