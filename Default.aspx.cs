@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using iTextSharp.text.pdf; // Requires iTextSharp NuGet package
 
 namespace DigitalSignatureProject
 {
@@ -32,18 +33,40 @@ namespace DigitalSignatureProject
                 return;
             }
 
-            string filePath = Server.MapPath("~/Uploads/") + FileUpload1.FileName;
+            string uploadsDir = Server.MapPath("~/Uploads/");
+            if (!System.IO.Directory.Exists(uploadsDir))
+            {
+                System.IO.Directory.CreateDirectory(uploadsDir);
+            }
+
+            string filePath = System.IO.Path.Combine(uploadsDir, FileUpload1.FileName);
             FileUpload1.SaveAs(filePath);
+
+            // Determine page count using iTextSharp
+            int pageCount = 1;
+            try
+            {
+                using (PdfReader reader = new PdfReader(filePath))
+                {
+                    pageCount = reader.NumberOfPages;
+                }
+            }
+            catch
+            {
+                // If page count fails, default to 1
+                pageCount = 1;
+            }
 
             lblMessage.Text = "File uploaded successfully!";
             lblMessage.ForeColor = System.Drawing.Color.Green;
+
             Session["PDFPath"] = filePath;
+            Session["PDFPageCount"] = pageCount;
+            Session["SignedPages"] = new System.Collections.Generic.List<int>();
+
             Response.Redirect("SignDocument.aspx");
 
             ScriptManager.RegisterStartupScript(this, this.GetType(), "hideSpinner", "document.getElementById('loadingSpinner').style.display='none';", true);
-
-            // Show preview
-            pdfPreview.Attributes["src"] = "~/Uploads/" + FileUpload1.FileName;
         }
     }
 }
